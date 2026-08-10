@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import "./App.css";
 
+const API_URL =
+  import.meta.env.VITE_API_URL || "http://localhost:5000";
+
 function App() {
   const [products, setProducts] = useState([]);
 
@@ -10,10 +13,10 @@ function App() {
   const [stock, setStock] = useState("");
 
   const loadProducts = () => {
-    fetch("http://localhost:5000/api/products")
+    fetch(`${API_URL}/api/products`)
       .then((response) => response.json())
       .then((data) => setProducts(data))
-      .catch((error) => console.error(error));
+      .catch((error) => console.error("Error loading products:", error));
   };
 
   useEffect(() => {
@@ -30,7 +33,7 @@ function App() {
       stock: Number(stock),
     };
 
-    const response = await fetch("http://localhost:5000/api/products", {
+    const response = await fetch(`${API_URL}/api/products`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
