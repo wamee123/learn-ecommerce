@@ -1,3 +1,5 @@
+import ProtectedAdminRoute from "./components/ProtectedAdminRoute";
+
 import { Routes, Route } from "react-router";
 
 import StoreLayout from "./components/StoreLayout";
@@ -17,6 +19,7 @@ function App() {
   return (
     <Routes>
 
+      {/* CUSTOMER WEBSITE */}
       <Route element={<StoreLayout />}>
         <Route path="/" element={<Home />} />
         <Route path="/shop" element={<Shop />} />
@@ -25,10 +28,36 @@ function App() {
         <Route path="/checkout" element={<Checkout />} />
       </Route>
 
+      {/* ADMIN LOGIN - NOT PROTECTED */}
       <Route path="/admin/login" element={<AdminLogin />} />
-      <Route path="/admin" element={<AdminDashboard />} />
-      <Route path="/admin/products" element={<AdminProducts />} />
-      <Route path="/admin/orders" element={<AdminOrders />} />
+
+      {/* PROTECTED ADMIN PAGES */}
+      <Route
+        path="/admin"
+        element={
+          <ProtectedAdminRoute>
+            <AdminDashboard />
+          </ProtectedAdminRoute>
+        }
+      />
+
+      <Route
+        path="/admin/products"
+        element={
+          <ProtectedAdminRoute>
+            <AdminProducts />
+          </ProtectedAdminRoute>
+        }
+      />
+
+      <Route
+        path="/admin/orders"
+        element={
+          <ProtectedAdminRoute>
+            <AdminOrders />
+          </ProtectedAdminRoute>
+        }
+      />
 
     </Routes>
   );

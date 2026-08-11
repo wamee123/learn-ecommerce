@@ -75,7 +75,10 @@ function ProductDetails() {
       <section className="product-details-container">
         <div className="details-image-area">
           {product.image ? (
-            <img src={product.image} alt={product.name} />
+           <img
+  src={product.image.startsWith("/") ? product.image : `/${product.image}`}
+  alt={product.name}
+/>
           ) : (
             <div className="details-placeholder">
               <span>LEATHER CO.</span>
