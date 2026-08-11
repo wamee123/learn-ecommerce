@@ -1,120 +1,36 @@
-import { useEffect, useState } from "react";
-import "./App.css";
+import { Routes, Route } from "react-router";
 
-const API_URL =
-  import.meta.env.VITE_API_URL || "http://localhost:5000";
+import StoreLayout from "./components/StoreLayout";
+
+import Home from "./pages/Home";
+import Shop from "./pages/Shop";
+import ProductDetails from "./pages/ProductDetails";
+import Cart from "./pages/Cart";
+import Checkout from "./pages/Checkout";
+
+import AdminLogin from "./pages/admin/AdminLogin";
+import AdminDashboard from "./pages/admin/AdminDashboard";
+import AdminProducts from "./pages/admin/AdminProducts";
+import AdminOrders from "./pages/admin/AdminOrders";
 
 function App() {
-  const [products, setProducts] = useState([]);
-
-  const [name, setName] = useState("");
-  const [price, setPrice] = useState("");
-  const [description, setDescription] = useState("");
-  const [stock, setStock] = useState("");
-
-  const loadProducts = () => {
-    fetch(`${API_URL}/api/products`)
-      .then((response) => response.json())
-      .then((data) => setProducts(data))
-      .catch((error) => console.error("Error loading products:", error));
-  };
-
-  useEffect(() => {
-    loadProducts();
-  }, []);
-
-  const addProduct = async (e) => {
-    e.preventDefault();
-
-    const newProduct = {
-      name,
-      price: Number(price),
-      description,
-      stock: Number(stock),
-    };
-
-    const response = await fetch(`${API_URL}/api/products`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(newProduct),
-    });
-
-    if (response.ok) {
-      alert("Product added!");
-
-      setName("");
-      setPrice("");
-      setDescription("");
-      setStock("");
-
-      loadProducts();
-    }
-  };
-
   return (
-    <div>
-      <h1>Learn Store</h1>
+    <Routes>
 
-      <h2>Add Product</h2>
+      <Route element={<StoreLayout />}>
+        <Route path="/" element={<Home />} />
+        <Route path="/shop" element={<Shop />} />
+        <Route path="/product/:id" element={<ProductDetails />} />
+        <Route path="/cart" element={<Cart />} />
+        <Route path="/checkout" element={<Checkout />} />
+      </Route>
 
-      <form onSubmit={addProduct}>
-        <input
-          type="text"
-          placeholder="Product name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          required
-        />
+      <Route path="/admin/login" element={<AdminLogin />} />
+      <Route path="/admin" element={<AdminDashboard />} />
+      <Route path="/admin/products" element={<AdminProducts />} />
+      <Route path="/admin/orders" element={<AdminOrders />} />
 
-        <br /><br />
-
-        <input
-          type="number"
-          placeholder="Price"
-          value={price}
-          onChange={(e) => setPrice(e.target.value)}
-          required
-        />
-
-        <br /><br />
-
-        <input
-          type="text"
-          placeholder="Description"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-        />
-
-        <br /><br />
-
-        <input
-          type="number"
-          placeholder="Stock"
-          value={stock}
-          onChange={(e) => setStock(e.target.value)}
-        />
-
-        <br /><br />
-
-        <button type="submit">Add Product</button>
-      </form>
-
-      <hr />
-
-      <h2>Products</h2>
-
-      {products.map((product) => (
-        <div key={product._id}>
-          <h3>{product.name}</h3>
-          <p>Price: LKR {product.price}</p>
-          <p>{product.description}</p>
-          <p>Stock: {product.stock}</p>
-          <hr />
-        </div>
-      ))}
-    </div>
+    </Routes>
   );
 }
 
